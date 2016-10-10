@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <p>Test</p>
+        <script>
+            function someLongRunningProcess(length, pid) {
+                delay(length)
+                
+                // approach 1: direct call back to native
+                window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
+                
+                // approach 2: setTimeout, then call back to native after random duration within 4000ms
+                /*setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
+                }, getRandomInt(1000,4000));*/
+            }
+        
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        
+            function delay(ms) {
+                var cur_d = new Date();
+                var cur_ticks = cur_d.getTime();
+                var ms_passed = 0;
+                while(ms_passed < ms) {
+                    var d = new Date();
+                    var ticks = d.getTime();
+                    ms_passed = ticks - cur_ticks;
+                }
+            }
+        </script>
+    </body>
+</html>
