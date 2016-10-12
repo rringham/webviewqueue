@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <script src="https://cdn.jsdelivr.net/bluebird/3.4.5/bluebird.js"></script>
     </head>
     <body>x 
         <p>Test</p>
@@ -11,9 +12,9 @@
             }
             
             function someLongRunningProcess(pid) {
-                setTimeout(function() {
+                Promise.delay(0).then(function() {
                     window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                }, 0);
+                })
             }
         
             function getRandomInt(min, max) {
