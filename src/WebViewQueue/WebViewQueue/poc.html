@@ -3,19 +3,17 @@
     <head>
         <meta charset="utf-8">
     </head>
-    <body>
+    <body>x 
         <p>Test</p>
         <script>
-            function someLongRunningProcess(length, pid) {
-                delay(length)
-                
-                // approach 1: direct call back to native
-                window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                
-                // approach 2: setTimeout, then call back to native after random duration within 4000ms
-                /*setTimeout(function() {
+            function ping() {
+                console.log("ping received")
+            }
+            
+            function someLongRunningProcess(pid) {
+                setTimeout(function() {
                     window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                }, getRandomInt(1000,4000));*/
+                }, 0);
             }
         
             function getRandomInt(min, max) {
@@ -32,6 +30,16 @@
                     ms_passed = ticks - cur_ticks;
                 }
             }
+        
+            //var counter = 0
+            //var func = null
+            //func = function() {
+            //    counter++
+            //    window.webkit.messageHandlers.continueHandler.postMessage({"jsHeartbeat":counter})
+            //    setTimeout(func, 1000)
+            //}
+            //func()
         </script>
     </body>
+</html>
 </html>

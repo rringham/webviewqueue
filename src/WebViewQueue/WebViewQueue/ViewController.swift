@@ -15,6 +15,14 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
     private var contentController: WKUserContentController!
     var operationsStarted = 0
     var operationsCompleted = 0
+    var webViewPingTimer: NSTimer?
+    
+    @IBOutlet weak var containerView: UIView!
+    
+    deinit {
+        webViewPingTimer?.invalidate()
+        webViewPingTimer = nil
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +35,8 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
             frame: self.view.frame,
             configuration: config
         )
+        //containerView.addSubview(webView)
+        
         webView.UIDelegate = self
         webView.loadHTMLString(getHtml(), baseURL: nil)
     }
@@ -38,17 +48,17 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
     }
     
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let pid = message.body["pid"] as? Int else {
-            return
+        if let pid = message.body["pid"] as? Int {
+            print("pid \(pid) callback")
+            self.operationsCompleted += 1
         }
-        print("pid \(pid) callback")
-        self.operationsCompleted += 1
+        
+        //if let counter = message.body["jsHeartbeat"] as? Int {
+        //    print("jsHeartbeat \(counter)")
+        //}
     }
     
     @IBAction func hammerWebView(sender: AnyObject) {
-        operationsStarted = 0
-        operationsCompleted = 0
-        
         // approach 1: async dispatch, interleaved request queuing
         // result: all complete successfully, no WKWebView hang
         //
@@ -76,11 +86,31 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         // result: all complete successfully, no WKWebView hang
         //
         for i in 1...100 {
-            print("starting main js operation \(i)")
+            print("MAIN starting js operation \(i)")
             self.operationsStarted += 1
-            self.webView.evaluateJavaScript("someLongRunningProcess(3000, \(i));", completionHandler: { (result, error) in
-                print("evaluateJavaScript completion handler for main js operation \(i) done")
+            self.webView.evaluateJavaScript("someLongRunningProcess(\(i));", completionHandler: { (result, error) in
+                print("MAIN evaluateJavaScript completion handler js operation \(i) done")
             })
+        }
+        
+        if let timer = webViewPingTimer {
+            timer.invalidate()
+        }        
+        webViewPingTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ViewController.pingWebView), userInfo: nil, repeats: true)
+    }
+    
+    func pingWebView()
+    {
+        if self.operationsCompleted < self.operationsStarted {
+            print("PING starting js operation, not all callbacks received yet: \(self.operationsCompleted)/\(self.operationsStarted)")
+            self.webView.evaluateJavaScript("ping();", completionHandler: { (result, error) in
+                print("PING evaluateJavaScript completion handler js operation done")
+            })
+        } else {
+            webViewPingTimer?.invalidate()
+            webViewPingTimer = nil
+            
+            print("All callbacks received: \(self.operationsCompleted)/\(self.operationsStarted)")
         }
     }
     
