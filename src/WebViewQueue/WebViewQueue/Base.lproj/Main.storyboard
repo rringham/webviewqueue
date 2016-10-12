@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -39,26 +39,13 @@
                                     <action selector="stats:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ADK-XA-z8f"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dwo-HY-OBO">
-                                <rect key="frame" x="237" y="361" width="126" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="126" id="1qI-bY-hWf"/>
-                                    <constraint firstAttribute="height" constant="30" id="1qi-nL-pBM"/>
-                                </constraints>
-                                <state key="normal" title="callAsync test"/>
-                                <connections>
-                                    <action selector="callAsyncTest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FLO-rk-rqs"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="xRf-9M-YYQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="29c-Ar-hoi"/>
                             <constraint firstItem="jAS-8i-wYn" firstAttribute="top" secondItem="xRf-9M-YYQ" secondAttribute="bottom" constant="8" id="g85-2s-Ge4"/>
-                            <constraint firstItem="dwo-HY-OBO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sgb-gB-T4r"/>
                             <constraint firstItem="jAS-8i-wYn" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tMP-0q-WMc"/>
                             <constraint firstItem="xRf-9M-YYQ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="uzC-hu-xjr"/>
-                            <constraint firstItem="dwo-HY-OBO" firstAttribute="top" secondItem="jAS-8i-wYn" secondAttribute="bottom" constant="8" id="xGh-q4-O13"/>
                         </constraints>
                     </view>
                 </viewController>

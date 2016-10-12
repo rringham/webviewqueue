@@ -88,10 +88,6 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         print("operations started: \(operationsStarted)")
         print("operations completed: \(operationsCompleted)")
     }
-
-    @IBAction func callAsyncTest(sender: AnyObject) {
-        
-    }
     
     func getHtml() -> String {
         let fileLocation = NSBundle.mainBundle().pathForResource("poc", ofType: "html")!
