@@ -6,16 +6,25 @@
     <body>
         <p>Test</p>
         <script>
+            function ping() {            
+            }
+            
             function someLongRunningProcess(length, pid) {
-                delay(length)
-                
                 // approach 1: direct call back to native
-                window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
+                /*window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})*/
                 
                 // approach 2: setTimeout, then call back to native after random duration within 4000ms
                 /*setTimeout(function() {
-                    window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                }, getRandomInt(1000,4000));*/
+                    delay(1000);
+                    setTimeout(function() {
+                        window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid});
+                    }, 0);
+                }, 0);*/
+
+                delay(1000);
+                setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid});
+                }, 0);
             }
         
             function getRandomInt(min, max) {

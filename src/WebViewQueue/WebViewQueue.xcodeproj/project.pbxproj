@@ -13,6 +13,7 @@
 		9B59C4221DABF50A00A7D315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B59C4211DABF50A00A7D315 /* Assets.xcassets */; };
 		9B59C4251DABF50A00A7D315 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B59C4231DABF50A00A7D315 /* LaunchScreen.storyboard */; };
 		9B59C42D1DABF88000A7D315 /* poc.html in Resources */ = {isa = PBXBuildFile; fileRef = 9B59C42C1DABF88000A7D315 /* poc.html */; };
+		9B71CDB91DAD8AA90074D9C6 /* poc.js in Resources */ = {isa = PBXBuildFile; fileRef = 9B71CDB81DAD8AA90074D9C6 /* poc.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		9B59C4241DABF50A00A7D315 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B59C4261DABF50A00A7D315 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B59C42C1DABF88000A7D315 /* poc.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = poc.html; sourceTree = "<group>"; };
+		9B71CDB81DAD8AA90074D9C6 /* poc.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = poc.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				9B59C41C1DABF50A00A7D315 /* ViewController.swift */,
 				9B59C41E1DABF50A00A7D315 /* Main.storyboard */,
 				9B59C42C1DABF88000A7D315 /* poc.html */,
+				9B71CDB81DAD8AA90074D9C6 /* poc.js */,
 				9B59C4211DABF50A00A7D315 /* Assets.xcassets */,
 				9B59C4231DABF50A00A7D315 /* LaunchScreen.storyboard */,
 				9B59C4261DABF50A00A7D315 /* Info.plist */,
@@ -99,6 +102,8 @@
 				TargetAttributes = {
 					9B59C4161DABF50A00A7D315 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 52QKC5T36Z;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -125,6 +130,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B71CDB91DAD8AA90074D9C6 /* poc.js in Resources */,
 				9B59C4251DABF50A00A7D315 /* LaunchScreen.storyboard in Resources */,
 				9B59C42D1DABF88000A7D315 /* poc.html in Resources */,
 				9B59C4221DABF50A00A7D315 /* Assets.xcassets in Resources */,
@@ -253,10 +259,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 52QKC5T36Z;
 				INFOPLIST_FILE = WebViewQueue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.poc.WebViewQueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "43ee74ab-c37e-43c0-b1e1-5a26055391e2";
+				PROVISIONING_PROFILE_SPECIFIER = "POC WebViewQueue Dev";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -265,10 +275,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 52QKC5T36Z;
 				INFOPLIST_FILE = WebViewQueue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.poc.WebViewQueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "43ee74ab-c37e-43c0-b1e1-5a26055391e2";
+				PROVISIONING_PROFILE_SPECIFIER = "POC WebViewQueue Dev";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -292,6 +306,7 @@
 				9B59C42B1DABF50A00A7D315 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
