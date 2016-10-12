@@ -39,6 +39,10 @@
                     ms_passed = ticks - cur_ticks;
                 }
             }
+
+            function ping() {
+                window.webkit.messageHandlers.continueHandler.postMessage({"ping":"pong"})
+            }
         </script>
     </body>
 </html>

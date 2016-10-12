@@ -89,6 +89,12 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         print("operations completed: \(operationsCompleted)")
     }
     
+    @IBAction func pingWebView(sender: AnyObject) {
+        self.webView.evaluateJavaScript("ping();", completionHandler: { (result, error) in
+            print("ping")
+        })
+    }
+
     func getHtml() -> String {
         let fileLocation = NSBundle.mainBundle().pathForResource("poc", ofType: "html")!
         do {
