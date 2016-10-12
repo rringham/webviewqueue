@@ -41,7 +41,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         guard let pid = message.body["pid"] as? Int else {
             return
         }
-        print("pid \(pid) callback")
+        print("\(NSDate()) pid \(pid) callback")
         self.operationsCompleted += 1
     }
     
@@ -75,11 +75,11 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         // approach 2: serial request queuing
         // result: all complete successfully, no WKWebView hang
         //
-        for i in 1...100 {
-            print("starting main js operation \(i)")
+        for i in 1...5 {
+            print("\(NSDate()) starting main js operation \(i)")
             self.operationsStarted += 1
             self.webView.evaluateJavaScript("someLongRunningProcess(3000, \(i));", completionHandler: { (result, error) in
-                print("evaluateJavaScript completion handler for main js operation \(i) done")
+                print("\(NSDate()) evaluateJavaScript completion handler for main js operation \(i) done")
             })
         }
     }
