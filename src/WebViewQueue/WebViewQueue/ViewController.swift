@@ -39,7 +39,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), configuration: config)
         webView?.UIDelegate = self
         webView?.loadHTMLString(getHtml(), baseURL: nil)
-//        view.addSubview(webView)
+//        view.addSubview(webView!)
     }
     
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void)
