@@ -26,6 +26,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
     var operationsQueued = 0
     var operationsStarted = 0
     var operationsCompleted = 0
+    var operationsCompletedCallback: (() -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +40,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), configuration: config)
         webView?.UIDelegate = self
         webView?.loadHTMLString(getHtml(), baseURL: nil)
-//        view.addSubview(webView!)
+        view.addSubview(webView!)
     }
     
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void)
@@ -76,6 +77,11 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
             if queued {
                 dequeueAndSubmitNextRequest()
             }
+            
+            if self.operationsStarted == self.operationsCompleted {
+                operationsCompletedCallback?()
+                operationsCompletedCallback = nil
+            }
         }
         
         if let pongId = message.body["pongId"] as? Int {
@@ -104,7 +110,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         operationsStarted = 0
         operationsCompleted = 0
         
-        for operationId in 1...10 {
+        for operationId in 1...3 {
             self.operationsQueued += 1
             requestQueue.append(RequestOperation(operationId))
         }
@@ -119,6 +125,16 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         print("operations started: \(operationsStarted)")
         print("operations completed: \(operationsCompleted)")
         print("")
+    }
+    
+    func startWithNoProcessQueuing(withCallback callback: () -> ()) {
+        operationsCompletedCallback = callback
+        startWithNoProcessQueuing("")
+    }
+    
+    func startWithProcessQueuing(withCallback callback: () -> ()) {
+        operationsCompletedCallback = callback
+        startWithProcessQueuing("")
     }
     
     func dequeueAndSubmitNextRequest() {
