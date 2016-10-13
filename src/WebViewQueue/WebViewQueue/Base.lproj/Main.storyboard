@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -17,44 +17,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRf-9M-YYQ">
-                                <rect key="frame" x="218" y="285" width="164" height="30"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGZ-TJ-X1M">
+                                <rect key="frame" x="175" y="227" width="251" height="146"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRf-9M-YYQ">
+                                        <rect key="frame" x="20" y="20" width="211" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="211" id="3a0-YQ-Cr7"/>
+                                            <constraint firstAttribute="height" constant="30" id="cdW-zP-MjT"/>
+                                        </constraints>
+                                        <state key="normal" title="Start (no process queueing)"/>
+                                        <connections>
+                                            <action selector="startWithNoProcessQueuing:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4a5-dq-vYH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCu-S0-JmH">
+                                        <rect key="frame" x="20" y="58" width="211" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="211" id="Qzc-Si-CP9"/>
+                                            <constraint firstAttribute="height" constant="30" id="h0Q-4f-w0q"/>
+                                        </constraints>
+                                        <state key="normal" title="Start (with process queueing)"/>
+                                        <connections>
+                                            <action selector="startWithProcessQueuing:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PpS-cK-wS7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAS-8i-wYn">
+                                        <rect key="frame" x="90" y="96" width="70" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="2Z6-rQ-7YP"/>
+                                            <constraint firstAttribute="height" constant="30" id="7sm-B9-PO8"/>
+                                        </constraints>
+                                        <state key="normal" title="Print stats"/>
+                                        <connections>
+                                            <action selector="printStats:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rdL-2k-Rgc"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="164" id="EFL-dj-xy9"/>
-                                    <constraint firstAttribute="height" constant="30" id="cdW-zP-MjT"/>
+                                    <constraint firstItem="MCu-S0-JmH" firstAttribute="top" secondItem="xRf-9M-YYQ" secondAttribute="bottom" constant="8" id="FAU-E6-xlJ"/>
+                                    <constraint firstItem="jAS-8i-wYn" firstAttribute="centerX" secondItem="dGZ-TJ-X1M" secondAttribute="centerX" id="FiU-kq-XZV"/>
+                                    <constraint firstItem="xRf-9M-YYQ" firstAttribute="top" secondItem="dGZ-TJ-X1M" secondAttribute="top" constant="20" id="MeL-m9-FeC"/>
+                                    <constraint firstAttribute="height" constant="146" id="OfZ-Pa-NZ8"/>
+                                    <constraint firstItem="jAS-8i-wYn" firstAttribute="top" secondItem="MCu-S0-JmH" secondAttribute="bottom" constant="8" id="TcH-FS-Erw"/>
+                                    <constraint firstItem="xRf-9M-YYQ" firstAttribute="centerX" secondItem="dGZ-TJ-X1M" secondAttribute="centerX" id="cdt-sj-1lo"/>
+                                    <constraint firstItem="MCu-S0-JmH" firstAttribute="centerX" secondItem="dGZ-TJ-X1M" secondAttribute="centerX" id="fme-eM-yjw"/>
+                                    <constraint firstAttribute="width" constant="251" id="rpq-mn-6hL"/>
                                 </constraints>
-                                <state key="normal" title="Hammer webview"/>
-                                <connections>
-                                    <action selector="hammerWebView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KzX-ew-W7q"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAS-8i-wYn">
-                                <rect key="frame" x="282" y="323" width="36" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="36" id="3xz-My-4iz"/>
-                                    <constraint firstAttribute="height" constant="30" id="TRN-Nl-1aV"/>
-                                </constraints>
-                                <state key="normal" title="Stats"/>
-                                <connections>
-                                    <action selector="stats:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ADK-XA-z8f"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFC-c1-L4J">
-                                <rect key="frame" x="251" y="361" width="98" height="30"/>
-                                <state key="normal" title="Ping WebView"/>
-                                <connections>
-                                    <action selector="pingWebView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hzf-oP-lSK"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="xRf-9M-YYQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="29c-Ar-hoi"/>
-                            <constraint firstItem="yFC-c1-L4J" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="MDm-B8-Bh4"/>
-                            <constraint firstItem="yFC-c1-L4J" firstAttribute="top" secondItem="jAS-8i-wYn" secondAttribute="bottom" constant="8" id="agC-lu-I9R"/>
-                            <constraint firstItem="jAS-8i-wYn" firstAttribute="top" secondItem="xRf-9M-YYQ" secondAttribute="bottom" constant="8" id="g85-2s-Ge4"/>
-                            <constraint firstItem="jAS-8i-wYn" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tMP-0q-WMc"/>
-                            <constraint firstItem="xRf-9M-YYQ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="uzC-hu-xjr"/>
+                            <constraint firstItem="dGZ-TJ-X1M" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0bg-Te-9Oa"/>
+                            <constraint firstItem="dGZ-TJ-X1M" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="txe-Wy-GFi"/>
                         </constraints>
                     </view>
                 </viewController>

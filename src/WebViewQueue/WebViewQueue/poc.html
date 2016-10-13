@@ -6,22 +6,28 @@
     <body>
         <p>Test</p>
         <script>
-            function someLongRunningProcess(length, pid) {
-
-                // approach 1: direct call back to native
-                /*window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})*/
-                
-                // approach 2: setTimeout, then call back to native after random duration within 4000ms
-                /*setTimeout(function() {
-                    window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                }, getRandomInt(1000,4000));*/
-
-                // approach 3: setTimeout nested twice. Simulates queueing up an operation that takes around half a second and later queueing up a response callback
+            function ping(id) {
+                window.webkit.messageHandlers.continueHandler.postMessage({"pongId":id});
+            }
+            
+            function someLongRunningProcess(id, queued) {
+                delay(1000);
                 setTimeout(function() {
-                    delay(500)
-                    setTimeout(function() {
-                        window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
-                    }, 0);
+                    window.webkit.messageHandlers.continueHandler.postMessage({"dataRequestProcessId":id, "queued":queued});
+                }, 0);
+            }
+        
+            function continueLongRunningProcess(id, queued) {
+                delay(1000);
+                setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"networkRequestProcessId":id, "queued":queued});
+                }, 0);
+            }
+        
+            function finishLongRunningProcess(id, queued) {
+                delay(1000);
+                setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"completedProcessId":id, "queued":queued});
                 }, 0);
             }
         
@@ -38,10 +44,6 @@
                     var ticks = d.getTime();
                     ms_passed = ticks - cur_ticks;
                 }
-            }
-
-            function ping() {
-                window.webkit.messageHandlers.continueHandler.postMessage({"ping":"pong"})
             }
         </script>
     </body>
