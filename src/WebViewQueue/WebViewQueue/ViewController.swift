@@ -63,7 +63,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         }
         
         if let networkRequestProcessId = message.body["networkRequestProcessId"] as? Int {
-            print("requested data for process id \(networkRequestProcessId)")
+            print("requested network data for process id \(networkRequestProcessId)")
             self.webView?.evaluateJavaScript("finishLongRunningProcess(\(networkRequestProcessId), \(queued));", completionHandler: { (result, error) in
                 print("evaluateJavaScript completion handler for \(queued ? "queued" : "unqueued") NETWORK REQUEST for js operation \(networkRequestProcessId) done")
             })
@@ -88,7 +88,7 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         operationsStarted = 0
         operationsCompleted = 0
         
-        for operationId in 1...10 {
+        for operationId in 1...3 {
             print("started process \(operationId)")
             self.operationsQueued += 1
             self.operationsStarted += 1
