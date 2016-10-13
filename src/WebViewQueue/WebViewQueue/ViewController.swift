@@ -8,115 +8,140 @@
 import Foundation
 import UIKit
 import WebKit
+import JavaScriptCore
+
+class RequestOperation {
+    var operationId: Int
+    
+    init(_ operationId: Int) {
+        self.operationId = operationId
+    }
+}
 
 class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
 
-    private var webView: WKWebView!
-    private var contentController: WKUserContentController!
+    var webView: WKWebView?
+    var contentController: WKUserContentController?
+    var requestQueue: [RequestOperation] = [RequestOperation]()
+    var operationsQueued = 0
     var operationsStarted = 0
     var operationsCompleted = 0
-    var webViewPingTimer: NSTimer?
-    
-    @IBOutlet weak var containerView: UIView!
-    
-    deinit {
-        webViewPingTimer?.invalidate()
-        webViewPingTimer = nil
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let config = WKWebViewConfiguration()
         contentController = WKUserContentController()
-        contentController.addScriptMessageHandler(self, name: "continueHandler")
-        config.userContentController = contentController
-        webView = WKWebView(
-            frame: self.view.frame,
-            configuration: config
-        )
-        //containerView.addSubview(webView)
+        contentController?.addScriptMessageHandler(self, name: "continueHandler")
         
-        webView.UIDelegate = self
-        webView.loadHTMLString(getHtml(), baseURL: nil)
+        let config = WKWebViewConfiguration()
+        config.userContentController = contentController!
+        
+        webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), configuration: config)
+        webView?.UIDelegate = self
+        webView?.loadHTMLString(getHtml(), baseURL: nil)
+//        view.addSubview(webView!)
     }
     
-    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
+    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void)
+    {
         let alert = UIAlertController(title: message, message: nil, preferredStyle: UIAlertControllerStyle.Alert);
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) { _ in completionHandler()});
         self.presentViewController(alert, animated: true, completion: {});
     }
     
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let pid = message.body["pid"] as? Int {
-            print("pid \(pid) callback")
+        var queued = false
+        if let queuedParam = message.body["queued"] as? Bool {
+            queued = queuedParam
+        }
+        
+        if let dataRequestProcessId = message.body["dataRequestProcessId"] as? Int {
+            print("requested data for process id \(dataRequestProcessId)")
+            self.webView?.evaluateJavaScript("continueLongRunningProcess(\(dataRequestProcessId), \(queued));", completionHandler: { (result, error) in
+                print("evaluateJavaScript completion handler for \(queued ? "queued" : "unqueued") DATA REQUEST for js operation \(dataRequestProcessId) done")
+            })
+        }
+        
+        if let networkRequestProcessId = message.body["networkRequestProcessId"] as? Int {
+            print("requested data for process id \(networkRequestProcessId)")
+            self.webView?.evaluateJavaScript("finishLongRunningProcess(\(networkRequestProcessId), \(queued));", completionHandler: { (result, error) in
+                print("evaluateJavaScript completion handler for \(queued ? "queued" : "unqueued") NETWORK REQUEST for js operation \(networkRequestProcessId) done")
+            })
+        }
+        
+        if let completedProcessId = message.body["completedProcessId"] as? Int {
+            print("completed process id \(completedProcessId)")
             self.operationsCompleted += 1
-        }
-        
-        //if let counter = message.body["jsHeartbeat"] as? Int {
-        //    print("jsHeartbeat \(counter)")
-        //}
-    }
-    
-    @IBAction func hammerWebView(sender: AnyObject) {
-        // approach 1: async dispatch, interleaved request queuing
-        // result: all complete successfully, no WKWebView hang
-        //
-        /*for i in 1...20 {
-            dispatch_async(dispatch_get_main_queue(), {
-                print("starting main js operation \(i)")
-                self.operationsStarted += 1
-                self.webView.evaluateJavaScript("someLongRunningProcess(2000, \(i));", completionHandler: { (result, error) in
-                    print("evaluateJavaScript completion handler for main js operation \(i) done")
-                    
-                    for j in 1...20 {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            print("    starting interleaved js operation \(j)")
-                            self.operationsStarted += 1
-                            self.webView.evaluateJavaScript("someLongRunningProcess(2000, \(j));", completionHandler: { (result, error) in
-                                print("    evaluateJavaScript completion handler for interleaved js operation \(j) done")
-                            })
-                        })
-                    }
-                })
-            })
-        }*/
-        
-        // approach 2: serial request queuing
-        // result: all complete successfully, no WKWebView hang
-        //
-        for i in 1...100 {
-            print("MAIN starting js operation \(i)")
-            self.operationsStarted += 1
-            self.webView.evaluateJavaScript("someLongRunningProcess(\(i));", completionHandler: { (result, error) in
-                print("MAIN evaluateJavaScript completion handler js operation \(i) done")
-            })
-        }
-        
-        if let timer = webViewPingTimer {
-            timer.invalidate()
-        }        
-        webViewPingTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ViewController.pingWebView), userInfo: nil, repeats: true)
-    }
-    
-    func pingWebView()
-    {
-        if self.operationsCompleted < self.operationsStarted {
-            print("PING starting js operation, not all callbacks received yet: \(self.operationsCompleted)/\(self.operationsStarted)")
-            self.webView.evaluateJavaScript("ping();", completionHandler: { (result, error) in
-                print("PING evaluateJavaScript completion handler js operation done")
-            })
-        } else {
-            webViewPingTimer?.invalidate()
-            webViewPingTimer = nil
             
-            print("All callbacks received: \(self.operationsCompleted)/\(self.operationsStarted)")
+            if queued {
+                dequeueAndSubmitNextRequest()
+            }
+        }
+        
+        if let pongId = message.body["pongId"] as? Int {
+            print("pong <- JS \(pongId)")
         }
     }
     
-    @IBAction func stats(sender: AnyObject) {
+    @IBAction func startWithNoProcessQueuing(sender: AnyObject) {
+        operationsQueued = 0
+        operationsStarted = 0
+        operationsCompleted = 0
+        
+        for operationId in 1...10 {
+            print("started process \(operationId)")
+            self.operationsQueued += 1
+            self.operationsStarted += 1
+            self.webView?.evaluateJavaScript("someLongRunningProcess(\(operationId), false);", completionHandler: { (result, error) in
+                print("evaluateJavaScript completion handler for unqueued START js operation \(operationId) done")
+            })
+        }
+        
+//        startPings()
+    }
+    
+    @IBAction func startWithProcessQueuing(sender: AnyObject) {
+        operationsStarted = 0
+        operationsCompleted = 0
+        
+        for operationId in 1...10 {
+            self.operationsQueued += 1
+            requestQueue.append(RequestOperation(operationId))
+        }
+        
+        dequeueAndSubmitNextRequest()
+//        startPings()
+    }
+    
+    @IBAction func printStats(sender: AnyObject) {
+        print("")
+        print("operations queued: \(operationsQueued)")
         print("operations started: \(operationsStarted)")
         print("operations completed: \(operationsCompleted)")
+        print("")
+    }
+    
+    func dequeueAndSubmitNextRequest() {
+        if let requestOperation = self.requestQueue.first {
+            self.requestQueue.removeFirst()
+            
+            print("started process \(requestOperation.operationId)")
+            self.operationsStarted += 1
+            self.webView?.evaluateJavaScript("someLongRunningProcess(\(requestOperation.operationId), true);", completionHandler: { (result, error) in
+                print("evaluateJavaScript completion handler for queued START js operation \(requestOperation.operationId) done")
+            })
+        }
+    }
+    
+    func startPings() {
+        dispatch_async(dispatch_get_main_queue()) {
+            for pingId in 1...100 {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(UInt64(pingId * 1000) * NSEC_PER_MSEC)), dispatch_get_main_queue(), { () -> Void in
+                    print("ping -> JS \(pingId)")
+                    self.webView?.evaluateJavaScript("ping(\(pingId));", completionHandler: nil)
+                })
+            }
+        }
     }
     
     func getHtml() -> String {
@@ -129,4 +154,3 @@ class ViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
         }
     }
 }
-

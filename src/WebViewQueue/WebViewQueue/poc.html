@@ -3,16 +3,31 @@
     <head>
         <meta charset="utf-8">
     </head>
-    <body>x 
+    <body>
         <p>Test</p>
         <script>
-            function ping() {
-                console.log("ping received")
+            function ping(id) {
+                window.webkit.messageHandlers.continueHandler.postMessage({"pongId":id});
             }
             
-            function someLongRunningProcess(pid) {
+            function someLongRunningProcess(id, queued) {
+                delay(1000);
                 setTimeout(function() {
-                    window.webkit.messageHandlers.continueHandler.postMessage({"pid":pid})
+                    window.webkit.messageHandlers.continueHandler.postMessage({"dataRequestProcessId":id, "queued":queued});
+                }, 0);
+            }
+        
+            function continueLongRunningProcess(id, queued) {
+                delay(1000);
+                setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"networkRequestProcessId":id, "queued":queued});
+                }, 0);
+            }
+        
+            function finishLongRunningProcess(id, queued) {
+                delay(1000);
+                setTimeout(function() {
+                    window.webkit.messageHandlers.continueHandler.postMessage({"completedProcessId":id, "queued":queued});
                 }, 0);
             }
         
@@ -30,16 +45,6 @@
                     ms_passed = ticks - cur_ticks;
                 }
             }
-        
-            //var counter = 0
-            //var func = null
-            //func = function() {
-            //    counter++
-            //    window.webkit.messageHandlers.continueHandler.postMessage({"jsHeartbeat":counter})
-            //    setTimeout(func, 1000)
-            //}
-            //func()
         </script>
     </body>
-</html>
 </html>
